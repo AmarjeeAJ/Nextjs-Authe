@@ -1,6 +1,4 @@
-
 import mongoose from "mongoose";
-
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -10,14 +8,13 @@ const userSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    required: [true, "Please provide a email"],
+    required: [true, "Please provide an email"],
     unique: true,
   },
   password: {
     type: String,
     required: [true, "Please provide a password"],
   },
-
   isVerified: {
     type: Boolean,
     default: false,
@@ -27,12 +24,12 @@ const userSchema = new mongoose.Schema({
     default: false,
   },
   forgotPasswordToken: String,
-    forgotPasswordExpire: Date,
-    verifyToken: String,
-    verifyTokenExpire: Date,
-
+  forgotPasswordExpire: Date,
+  verifyToken: String,
+  verifyTokenExpire: Date,
 });
 
-const User = mongoose.models.User || mongoose.model("users", userSchema);
+// ✅ Fix: Ensure the model is not recompiled
+const User = mongoose.models.User || mongoose.model("User", userSchema);
 
 export default User;
