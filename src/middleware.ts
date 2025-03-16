@@ -1,26 +1,31 @@
-// import { NextResponse } from 'next/server'
-// import type { NextRequest } from 'next/server'
- 
-// // This function can be marked `async` if using `await` inside
-// export function middleware(request: NextRequest) {
-//     const path = request.nextUrl.pathname
-//     const isPublishPath =  path === '/login' || path === '/signup'
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-//     const token =  request.cookies.get('token') ?.value || ''
+// Middleware function
+export function middleware(request: NextRequest) {
+    const path = request.nextUrl.pathname;
+    const isPublicPath = path === '/login' || path === '/signup';
 
-//     if (isPublicPath && token) {
-//         return.NextResponse.redire
-//     }
+    const token = request.cookies.get('token')?.value || '';
 
- 
-// }
- 
-// // See "Matching Paths" below to learn more
-// export const config = {
-//   matcher:[
-//     '/',
-//     '/profile',
-//     'login',
-//     '/signup'
-// ]
-// }
+    // Redirect logic
+    if (isPublicPath && token) {
+        return NextResponse.redirect(new URL('/', request.url));
+    }
+
+    if (!isPublicPath && !token) {
+        return NextResponse.redirect(new URL('/login', request.url));
+    }
+
+    return NextResponse.next();
+}
+
+// Matching routes
+export const config = {
+    matcher: [
+        '/',
+        '/profile',
+        '/login',
+        '/signup'
+    ]
+};
